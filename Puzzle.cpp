@@ -1,18 +1,17 @@
 #include "Puzzle.h"
 
 Puzzle::Puzzle() {
-	this->solved = false;
-	generate();
+	this->proposedHash = "";
 }
 
-void Puzzle::generate() {
-	//todo
+string Puzzle::getProposedHash() {
+	return this->proposedHash;
 }
 
-bool Puzzle::getSolved() {
-	return this->solved;
+void Puzzle::setProposedHash(string hash) {
+	this->proposedHash = hash;
 }
 
-void Puzzle::setSolved(bool solved) {
-	this->solved = solved;
+bitset<PUZZLE_DIFFICULTY> Puzzle::getPuzzle() {
+	return this->puzzle;
 }

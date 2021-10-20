@@ -59,3 +59,7 @@ void Transaction::setGasFee(unsigned int gasFee) {
 	this->gasFee = gasFee;
 }
 #pragma endregion
+
+string Transaction::toString() {
+	return to_string(this->getAmount()) + " " + to_string(this->getFromAddress()) + " " + to_string(this->getToAddress()) + " " + to_string(this->getGasFee());
+}

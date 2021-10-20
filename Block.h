@@ -7,6 +7,8 @@
 
 using namespace std;
 
+const unsigned int MAX_TRANSACTIONS_PER_BLOCK = 2;
+
 class Block {
 public:
 	Block();

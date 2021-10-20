@@ -3,19 +3,25 @@
 
 #include "TransactionPool.h"
 #include "Puzzle.h"
-#include <string>
+#include "Block.h"
+#include "Sha256.h"
+#include <algorithm>
+#include <bitset>
+#include <mutex>
 
 const unsigned int NUM_TRANSACTIONS_PER_BLOCK = 2;
 
 class Miner {
 public:
-	Miner(TransactionPool* transactionPool, Puzzle * puzzle);
-	void mine();
-	bool verifyHash(Transaction* transactions, string input);
-
+	Miner();
+	void mine(Puzzle* puzzle, TransactionPool* transactionPool, mutex * mtx);
+	bool verifyHash(string hash, Puzzle* puzzle);
+	Transaction** getHighestTransactionFees();
 private:
-	Transaction** getHighestTransactionsFees();
-	TransactionPool* transactionPool;
-	Puzzle* puzzle;
+	void setHighestTransactionsFees(TransactionPool* transactionPool);
+	string createHash();
+	string getTransactionInput();
+	string generateRandomString(size_t length);
+	Transaction** highestTransactionFees;
 };
 #endif // !MINER_h

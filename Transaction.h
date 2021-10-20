@@ -2,6 +2,7 @@
 #define TRANSACTION_H
 
 #include <iostream>
+#include <string>
 using namespace std;
 
 class Transaction {
@@ -21,6 +22,7 @@ public:
 	void setToAddress(unsigned int toAddress);
 	void setAmount(unsigned int amount);
 	void setGasFee(unsigned int gasFee);
+	string toString();
 private:
 	unsigned int transactionHash;
 	unsigned int fromAddress;

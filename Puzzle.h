@@ -1,15 +1,22 @@
 #ifndef PUZZLE_H
 #define PUZZLE_H
+#include <string>
+#include <bitset>
+
+const size_t PUZZLE_DIFFICULTY = 5;
+
+using namespace std;
 
 class Puzzle {
 public:
 	Puzzle();
-	void generate();
-	bool getSolved();
-	void setSolved(bool solved);
+	string getProposedHash();
+	void setProposedHash(string hash);
+	bitset<PUZZLE_DIFFICULTY> getPuzzle();
 
 private:
-	bool solved;
+	string proposedHash;
+	bitset<PUZZLE_DIFFICULTY> puzzle;
 };
 #endif
 

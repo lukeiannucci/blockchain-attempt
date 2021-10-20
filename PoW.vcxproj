@@ -88,12 +88,14 @@
       </PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>
+      </AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -102,7 +104,7 @@
       </PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_DEBUG;_CONSOLE;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
     </ClCompile>
     <Link>
@@ -152,6 +154,7 @@
     <ClCompile Include="Miner.cpp" />
     <ClCompile Include="PoW.cpp" />
     <ClCompile Include="Puzzle.cpp" />
+    <ClCompile Include="Sha256.cpp" />
     <ClCompile Include="Transaction.cpp" />
     <ClCompile Include="TransactionPool.cpp" />
     <ClCompile Include="Wallet.cpp" />
@@ -163,6 +166,7 @@
     <ClInclude Include="LukeCoin.h" />
     <ClInclude Include="Miner.h" />
     <ClInclude Include="Puzzle.h" />
+    <ClInclude Include="Sha256.h" />
     <ClInclude Include="Transaction.h" />
     <ClInclude Include="TransactionPool.h" />
     <ClInclude Include="Wallet.h" />

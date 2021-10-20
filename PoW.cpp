@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include "Miner.h"
+#include <thread>
 
 void walletTest() {
     /*char name[] = "lukes wallet";
@@ -18,18 +19,25 @@ void walletTest() {
     int i = 0;*/
 }
 
+const unsigned int MINERS_TO_SPAWN = 10;
+
 int main()
 {
     //walletTest();
-    TransactionPool* transactionPool = new TransactionPool();
-    Puzzle* puzzle = new Puzzle();
+    TransactionPool transactionPool;
+    Puzzle puzzle;
+    thread threads[MINERS_TO_SPAWN];
+    Miner miners[MINERS_TO_SPAWN];
+    string hash;
+    mutex mtx;
 
-    //todo create like 10 miners
-    Miner miner(transactionPool, puzzle);
-    miner.mine();
+    for (int i = 0; i < MINERS_TO_SPAWN; i++) {
+        threads[i] = thread(&Miner::mine, miners[i], &puzzle, &transactionPool, &mtx);
+    }
 
-    delete transactionPool;
-    delete puzzle;
+    for (int i = 0; i < MINERS_TO_SPAWN; i++) {
+        threads[i].join();
+    }
 
     
     std::cout << "Hello World!\n";
