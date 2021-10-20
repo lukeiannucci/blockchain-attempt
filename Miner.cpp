@@ -65,11 +65,7 @@ string Miner::getTransactionInput() {
 }
 
 bool Miner::verifyHash(string hash, Puzzle* puzzle) {
-	//char == 8 bits
-	cout << "hash: " + hash << endl;
-	cout << "test: " << bitset<1>(hash.c_str()[0]) << endl;
-	cout << "bitset: " << bitset<8>(hash.c_str()[0]) << endl;
-	return puzzle->getPuzzle() == bitset<PUZZLE_DIFFICULTY>(hash.c_str()[0]);
+	return puzzle->getPuzzle() == hash.substr(0, PUZZLE_DIFFICULTY);
 }
 
 string Miner::generateRandomString(size_t length)

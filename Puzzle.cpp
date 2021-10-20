@@ -2,6 +2,10 @@
 
 Puzzle::Puzzle() {
 	this->proposedHash = "";
+	this->puzzle = "";
+	for (int i = 0; i < PUZZLE_DIFFICULTY; i++) {
+		this->puzzle += "0";
+	}
 }
 
 string Puzzle::getProposedHash() {
@@ -12,6 +16,6 @@ void Puzzle::setProposedHash(string hash) {
 	this->proposedHash = hash;
 }
 
-bitset<PUZZLE_DIFFICULTY> Puzzle::getPuzzle() {
+string Puzzle::getPuzzle() {
 	return this->puzzle;
 }

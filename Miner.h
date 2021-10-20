@@ -6,7 +6,6 @@
 #include "Block.h"
 #include "Sha256.h"
 #include <algorithm>
-#include <bitset>
 #include <mutex>
 
 const unsigned int NUM_TRANSACTIONS_PER_BLOCK = 2;

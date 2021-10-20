@@ -1,9 +1,8 @@
 #ifndef PUZZLE_H
 #define PUZZLE_H
 #include <string>
-#include <bitset>
 
-const size_t PUZZLE_DIFFICULTY = 5;
+const size_t PUZZLE_DIFFICULTY = 4;
 
 using namespace std;
 
@@ -12,11 +11,11 @@ public:
 	Puzzle();
 	string getProposedHash();
 	void setProposedHash(string hash);
-	bitset<PUZZLE_DIFFICULTY> getPuzzle();
+	string getPuzzle();
 
 private:
 	string proposedHash;
-	bitset<PUZZLE_DIFFICULTY> puzzle;
+	string puzzle;
 };
 #endif
 
