@@ -2,7 +2,7 @@
 
 TransactionPool::TransactionPool()
 {
-	this->transactionsPending = new Transaction * [MAX_TRANSACTIONS];
+	this->transactionsPending = new Transaction[MAX_TRANSACTIONS];
 	createTransaction(0x1, 0x2, 10, 7, 0);
 	createTransaction(0x2, 0x3, 5, 1, 1);
 	createTransaction(0x5, 0x1, 3, 2, 2);
@@ -16,10 +16,10 @@ TransactionPool::TransactionPool()
 	createTransaction(1, 2, 3, 2, 0);*/
 }
 
-Transaction** TransactionPool::getTransactionsPending() {
+Transaction* TransactionPool::getTransactionsPending() {
 	return this->transactionsPending;
 }
 
 void TransactionPool::createTransaction(unsigned int fromAddress, unsigned int toAddress, unsigned int amount, unsigned int gasFee, unsigned int index) {
-	this->transactionsPending[index] = new Transaction(fromAddress, toAddress, amount, gasFee);
+	this->transactionsPending[index] = Transaction(fromAddress, toAddress, amount, gasFee);
 }

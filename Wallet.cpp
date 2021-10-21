@@ -9,12 +9,12 @@ Wallet::Wallet() {
 	}
 }
 
-Wallet::Wallet(unsigned int address, unsigned int coins, string name, Transaction** transactionHistory, unsigned int historySize) {
+Wallet::Wallet(unsigned int address, unsigned int coins, string name, Transaction* transactionHistory, unsigned int historySize) {
 	this->address = address;
 	this->coins = coins;
 	this->name = name;
 	for (int i = 0; i < historySize; i++) {
-		this->transactionHistory.push_back(*transactionHistory[i]);
+		this->transactionHistory.push_back(transactionHistory[i]);
 	}
 }
 

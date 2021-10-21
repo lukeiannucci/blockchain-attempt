@@ -1,2 +1,0 @@
-C:\Users\lukei\OneDrive\Crypto\PoW\Debug\PoW.exe
-C:\Users\lukei\OneDrive\Crypto\PoW\Debug\PoW.pdb

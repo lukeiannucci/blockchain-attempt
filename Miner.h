@@ -15,12 +15,12 @@ public:
 	Miner();
 	void mine(Puzzle* puzzle, TransactionPool* transactionPool, mutex * mtx);
 	bool verifyHash(string hash, Puzzle* puzzle);
-	Transaction** getHighestTransactionFees();
+	Transaction* getHighestTransactionFees();
 private:
 	void setHighestTransactionsFees(TransactionPool* transactionPool);
 	string createHash();
 	string getTransactionInput();
 	string generateRandomString(size_t length);
-	Transaction** highestTransactionFees;
+	Transaction* highestTransactionFees;
 };
 #endif // !MINER_h

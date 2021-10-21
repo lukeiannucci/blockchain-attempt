@@ -2,35 +2,34 @@
 
 
 Miner::Miner() {
-	this->highestTransactionFees = new Transaction * [NUM_TRANSACTIONS_PER_BLOCK];
+	this->highestTransactionFees = new Transaction[NUM_TRANSACTIONS_PER_BLOCK];
 }
 
 //trying to make bread $$$$$ find highest txn fees
 void Miner::setHighestTransactionsFees(TransactionPool* transactionPool) {
 	//leave unsorted not a standard queue more of priority queue based on gas fee
+	//super inefficient
 	auto transactionsPending = transactionPool->getTransactionsPending();
 	unsigned int maxFeeOne = 0;
 	unsigned int maxFeeTwo = 0;
 	for (int i = 0; i < MAX_TRANSACTIONS; i++) {
 		auto transactionPending = transactionsPending[i];
-		if (transactionPending != nullptr) {
-			auto gasFee = transactionPending->getGasFee();
-			if (maxFeeOne < gasFee) {
-				if (maxFeeTwo < maxFeeOne && maxFeeOne > 0) {
-					maxFeeTwo = maxFeeOne;
-					this->highestTransactionFees[1] = this->highestTransactionFees[0];
-				}
-				maxFeeOne = gasFee;
-				this->highestTransactionFees[0] = transactionPending;
-			} else if (maxFeeTwo < gasFee) {
-				maxFeeTwo = gasFee;
-				this->highestTransactionFees[1] = transactionPending;
+		auto gasFee = transactionPending.getGasFee();
+		if (maxFeeOne < gasFee) {
+			if (maxFeeTwo < maxFeeOne && maxFeeOne > 0) {
+				maxFeeTwo = maxFeeOne;
+				this->highestTransactionFees[1] = this->highestTransactionFees[0];
 			}
+			maxFeeOne = gasFee;
+			this->highestTransactionFees[0] = transactionPending;
+		} else if (maxFeeTwo < gasFee) {
+			maxFeeTwo = gasFee;
+			this->highestTransactionFees[1] = transactionPending;
 		}
 	}
 }
 
-Transaction** Miner::getHighestTransactionFees() {
+Transaction* Miner::getHighestTransactionFees() {
 	return this->highestTransactionFees;
 }
 
@@ -59,7 +58,7 @@ string Miner::createHash() {
 string Miner::getTransactionInput() {
 	string transactionString;
 	for (int i = 0; i < MAX_TRANSACTIONS_PER_BLOCK; i++) {
-		transactionString += this->highestTransactionFees[i]->toString() + "|";
+		transactionString += this->highestTransactionFees[i].toString() + "|";
 	}
 	return transactionString;
 }

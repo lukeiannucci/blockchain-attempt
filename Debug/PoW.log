@@ -1,7 +1,0 @@
-﻿  Miner.cpp
-C:\Users\lukei\OneDrive\Crypto\PoW\Miner.cpp(18,18): warning C4018: '<': signed/unsigned mismatch
-C:\Users\lukei\OneDrive\Crypto\PoW\Miner.cpp(25,25): warning C4018: '<': signed/unsigned mismatch
-  PoW.cpp
-  Puzzle.cpp
-  Generating Code...
-  PoW.vcxproj -> C:\Users\lukei\OneDrive\Crypto\PoW\Debug\PoW.exe

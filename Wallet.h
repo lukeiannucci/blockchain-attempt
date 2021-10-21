@@ -13,7 +13,7 @@ const unsigned int MAX_WALLET_NAME_LENGTH = 20U;
 class Wallet {
 public:
 	Wallet();
-	Wallet(unsigned int address, unsigned int coins, string name, Transaction** transactionHistory, unsigned int historySize);
+	Wallet(unsigned int address, unsigned int coins, string name, Transaction* transactionHistory, unsigned int historySize);
 	~Wallet();
 	//getters
 	unsigned int getAddress();

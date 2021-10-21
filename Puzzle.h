@@ -2,7 +2,7 @@
 #define PUZZLE_H
 #include <string>
 
-const size_t PUZZLE_DIFFICULTY = 4;
+const size_t PUZZLE_DIFFICULTY = 5;
 
 using namespace std;
 
