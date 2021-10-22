@@ -2,25 +2,32 @@
 #define MINER_H
 
 #include "TransactionPool.h"
+#include "Blockchain.h"
 #include "Puzzle.h"
 #include "Block.h"
 #include "Sha256.h"
 #include <algorithm>
 #include <mutex>
+#include <atomic>
+#include <chrono>
+#include <thread>
 
-const unsigned int NUM_TRANSACTIONS_PER_BLOCK = 2;
+const unsigned int MINERS_TO_SPAWN = 1;
+using namespace std::this_thread;
+using namespace std::chrono;
 
 class Miner {
 public:
 	Miner();
-	void mine(Puzzle* puzzle, TransactionPool* transactionPool, mutex * mtx);
+	void mine(Puzzle* puzzle, TransactionPool* transactionPool, mutex * mtx, Blockchain* blockChain, atomic_int * confirmations);
 	bool verifyHash(string hash, Puzzle* puzzle);
 	Transaction* getHighestTransactionFees();
 private:
 	void setHighestTransactionsFees(TransactionPool* transactionPool);
-	string createHash();
-	string getTransactionInput();
+	string createHash(string input);
+	string getTransactionInput(Transaction* transactions);
 	string generateRandomString(size_t length);
 	Transaction* highestTransactionFees;
+	bool verified;
 };
 #endif // !MINER_h

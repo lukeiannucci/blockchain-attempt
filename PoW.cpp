@@ -19,7 +19,7 @@ void walletTest() {
     int i = 0;*/
 }
 
-const unsigned int MINERS_TO_SPAWN = 10;
+
 
 int main()
 {
@@ -30,9 +30,11 @@ int main()
     Miner miners[MINERS_TO_SPAWN];
     string hash;
     mutex mtx;
+    Blockchain blockChain;
+    std::atomic_int confirmations{0};
 
     for (int i = 0; i < MINERS_TO_SPAWN; i++) {
-        threads[i] = thread(&Miner::mine, miners[i], &puzzle, &transactionPool, &mtx);
+        threads[i] = thread(&Miner::mine, miners[i], &puzzle, &transactionPool, &mtx, &blockChain, &confirmations);
     }
 
     for (int i = 0; i < MINERS_TO_SPAWN; i++) {

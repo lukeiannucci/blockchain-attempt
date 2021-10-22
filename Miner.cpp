@@ -2,7 +2,8 @@
 
 
 Miner::Miner() {
-	this->highestTransactionFees = new Transaction[NUM_TRANSACTIONS_PER_BLOCK];
+	this->highestTransactionFees = new Transaction[MAX_TRANSACTIONS_PER_BLOCK];
+	this->verified = false;
 }
 
 //trying to make bread $$$$$ find highest txn fees
@@ -13,6 +14,7 @@ void Miner::setHighestTransactionsFees(TransactionPool* transactionPool) {
 	unsigned int maxFeeOne = 0;
 	unsigned int maxFeeTwo = 0;
 	for (int i = 0; i < MAX_TRANSACTIONS; i++) {
+		int j = 0;
 		auto transactionPending = transactionsPending[i];
 		auto gasFee = transactionPending.getGasFee();
 		if (maxFeeOne < gasFee) {
@@ -22,7 +24,8 @@ void Miner::setHighestTransactionsFees(TransactionPool* transactionPool) {
 			}
 			maxFeeOne = gasFee;
 			this->highestTransactionFees[0] = transactionPending;
-		} else if (maxFeeTwo < gasFee) {
+		}
+		else if (maxFeeTwo < gasFee) {
 			maxFeeTwo = gasFee;
 			this->highestTransactionFees[1] = transactionPending;
 		}
@@ -33,32 +36,60 @@ Transaction* Miner::getHighestTransactionFees() {
 	return this->highestTransactionFees;
 }
 
-void Miner::mine(Puzzle* puzzle, TransactionPool* transactionPool, mutex * mtx) {
+void Miner::mine(Puzzle* puzzle, TransactionPool* transactionPool, mutex * mtx, Blockchain * blockChain, atomic_int * confirmations) {
 	setHighestTransactionsFees(transactionPool);
 	do {
-		string hash = this->createHash();
+		string input = this->getTransactionInput(this->highestTransactionFees);
+		string randomString = this->generateRandomString(10);
+		string hash = this->createHash(input + randomString);
 		bool wonChallenge = this->verifyHash(hash, puzzle);
 		//reward first miner only by locking critical section
 		(*mtx).lock();
-		if (wonChallenge && puzzle->getProposedHash().empty()) {
-			puzzle->setProposedHash(hash);
+		if (wonChallenge && blockChain->getProposedBlock() == nullptr) {
+			this->verified = true;
+			blockChain->proposeBlock(new Block(hash, randomString, this->highestTransactionFees));
+			++(*confirmations);
 		}
 		(*mtx).unlock();
-	} while (puzzle->getProposedHash().empty());
+		if (blockChain->getProposedBlock() != nullptr && !this->verified) {
+			//it will run a verification whether hash is good or bad
+			this->verified = true;
+			string transactionsString = this->getTransactionInput(blockChain->getProposedBlock()->getProposedTransactions());
+			string verifiedHash = this->createHash(transactionsString + blockChain->getProposedBlock()->getInput());
+			bool confirmed = this->verifyHash(verifiedHash, puzzle);
+			if (confirmed) {
+				++(*confirmations);
+			}
+		}
+		(*mtx).lock();
+		if (confirmations->load() > (MINERS_TO_SPAWN / 2) && !blockChain->getBlockAccepted()) {
+			blockChain->addBlock();
+		}
+		(*mtx).unlock();
+		if (blockChain->getBlockAccepted()) {
+			break;
+		}
+	} while (true);
+
+	delete[] this->highestTransactionFees;
+	this->highestTransactionFees = new Transaction[MAX_TRANSACTIONS_PER_BLOCK];
+	this->verified = false;
+	//wait for other miners
+	sleep_for(milliseconds(5000));
+	//mine until no more transactions in pool
+	mine(puzzle, transactionPool, mtx, blockChain, confirmations);
+	
 	int i = 0;
 }
 
-string Miner::createHash() {
-	string input = this->getTransactionInput();
-	input += this->generateRandomString(10);
-
+string Miner::createHash(string input) {
 	return sha256(input);
 }
 
-string Miner::getTransactionInput() {
+string Miner::getTransactionInput(Transaction* transactions) {
 	string transactionString;
 	for (int i = 0; i < MAX_TRANSACTIONS_PER_BLOCK; i++) {
-		transactionString += this->highestTransactionFees[i].toString() + "|";
+		transactionString += transactions[i].toString() + "|";
 	}
 	return transactionString;
 }

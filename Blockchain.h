@@ -10,12 +10,16 @@ using namespace std;
 
 class Blockchain {
 public:
-	void addBlock(Block* block);
+	void addBlock();
 	void displayBlockchain();
-
+	void proposeBlock(Block* block);
+	Block* getProposedBlock();
 	Blockchain();
+	bool getBlockAccepted();
 
 private:
+	Block* latestProposedBlock;
+	bool blockAccepted;
 	//todo is this really a vector?
 	vector<Block> blockchain;
 };
