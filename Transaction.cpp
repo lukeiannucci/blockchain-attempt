@@ -16,6 +16,22 @@ Transaction::Transaction(unsigned int from, unsigned int to, unsigned int amount
 	this->gasFee = gasFee;
 }
 
+bool Transaction::operator ==(const Transaction& rhs) const {
+	return this->fromAddress == rhs.fromAddress && this->toAddress == rhs.toAddress && this->amount == rhs.amount && this->gasFee == rhs.gasFee;
+}
+
+bool Transaction::operator !=(const Transaction& rhs) const {
+	return !this->operator==(rhs);
+}
+
+size_t Transaction::operator()(const Transaction& rhs) const {
+	size_t hash = this->amount ^ rhs.amount;
+	hash += this->fromAddress ^ rhs.fromAddress;
+	hash += this->toAddress ^ rhs.toAddress;
+	hash += this->gasFee ^ rhs.gasFee;
+	return hash;
+}
+
 #pragma region GETTERS
 unsigned int Transaction::getTransactionHash() {
 	return this->transactionHash;

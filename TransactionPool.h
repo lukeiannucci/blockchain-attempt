@@ -2,17 +2,17 @@
 #define TRANSACTIONPOOL_H
 
 #include "Transaction.h"
-#include <deque>
+#include <unordered_set>
 
 const unsigned int MAX_TRANSACTIONS = 6;
 
 class TransactionPool {
 public:
 	TransactionPool();
-	Transaction* getTransactionsPending();
+	unordered_set<Transaction, Transaction> getTransactionsPending();
+	void remove(Transaction transaction);
 private:
-	Transaction* transactionsPending;
-	void createTransaction(unsigned int fromAddress, unsigned int toAddress, unsigned int amount, unsigned int gasFee, unsigned int index);
+	unordered_set<Transaction, Transaction> transactionsPending;
 };
 #endif // !TRANSCATIONPOOL_H
 

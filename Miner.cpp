@@ -7,29 +7,28 @@ Miner::Miner() {
 }
 
 //trying to make bread $$$$$ find highest txn fees
-void Miner::setHighestTransactionsFees(TransactionPool* transactionPool) {
-	//leave unsorted not a standard queue more of priority queue based on gas fee
-	//super inefficient
-	auto transactionsPending = transactionPool->getTransactionsPending();
+bool Miner::setHighestTransactionsFees(TransactionPool* transactionPool) {
+	if (transactionPool->getTransactionsPending().size() == 0) {
+		return true;
+	}
 	unsigned int maxFeeOne = 0;
 	unsigned int maxFeeTwo = 0;
-	for (int i = 0; i < MAX_TRANSACTIONS; i++) {
-		int j = 0;
-		auto transactionPending = transactionsPending[i];
-		auto gasFee = transactionPending.getGasFee();
+	for (auto pendingTransaction : transactionPool->getTransactionsPending()) {
+		auto gasFee = pendingTransaction.getGasFee();
 		if (maxFeeOne < gasFee) {
 			if (maxFeeTwo < maxFeeOne && maxFeeOne > 0) {
 				maxFeeTwo = maxFeeOne;
 				this->highestTransactionFees[1] = this->highestTransactionFees[0];
 			}
 			maxFeeOne = gasFee;
-			this->highestTransactionFees[0] = transactionPending;
+			this->highestTransactionFees[0] = pendingTransaction;
 		}
 		else if (maxFeeTwo < gasFee) {
 			maxFeeTwo = gasFee;
-			this->highestTransactionFees[1] = transactionPending;
+			this->highestTransactionFees[1] = pendingTransaction;
 		}
 	}
+	return false;
 }
 
 Transaction* Miner::getHighestTransactionFees() {
@@ -37,7 +36,10 @@ Transaction* Miner::getHighestTransactionFees() {
 }
 
 void Miner::mine(Puzzle* puzzle, TransactionPool* transactionPool, mutex * mtx, Blockchain * blockChain, atomic_int * confirmations) {
-	setHighestTransactionsFees(transactionPool);
+	if (setHighestTransactionsFees(transactionPool)) {
+		return;
+	}
+	auto block = new Block();
 	do {
 		string input = this->getTransactionInput(this->highestTransactionFees);
 		string randomString = this->generateRandomString(10);
@@ -47,8 +49,15 @@ void Miner::mine(Puzzle* puzzle, TransactionPool* transactionPool, mutex * mtx, 
 		(*mtx).lock();
 		if (wonChallenge && blockChain->getProposedBlock() == nullptr) {
 			this->verified = true;
-			blockChain->proposeBlock(new Block(hash, randomString, this->highestTransactionFees));
+			block->setCurrentHash(hash);
+			block->setInput(randomString);
+			block->setProposedTransactions(this->highestTransactionFees);
+			blockChain->proposeBlock(block);
 			++(*confirmations);
+		} else if (confirmations->load() > (MINERS_TO_SPAWN / 2) && !blockChain->getBlockAccepted()) {
+			blockChain->addBlock();
+			transactionPool->remove(this->highestTransactionFees[0]);
+			transactionPool->remove(this->highestTransactionFees[1]);
 		}
 		(*mtx).unlock();
 		if (blockChain->getProposedBlock() != nullptr && !this->verified) {
@@ -61,21 +70,22 @@ void Miner::mine(Puzzle* puzzle, TransactionPool* transactionPool, mutex * mtx, 
 				++(*confirmations);
 			}
 		}
-		(*mtx).lock();
-		if (confirmations->load() > (MINERS_TO_SPAWN / 2) && !blockChain->getBlockAccepted()) {
-			blockChain->addBlock();
-		}
-		(*mtx).unlock();
 		if (blockChain->getBlockAccepted()) {
 			break;
 		}
 	} while (true);
 
-	delete[] this->highestTransactionFees;
-	this->highestTransactionFees = new Transaction[MAX_TRANSACTIONS_PER_BLOCK];
+	
+	//delete[] this->highestTransactionFees;
+	//this->highestTransactionFees = new Transaction[MAX_TRANSACTIONS_PER_BLOCK];
 	this->verified = false;
 	//wait for other miners
-	sleep_for(milliseconds(5000));
+	std::this_thread::sleep_for(milliseconds(1000));
+	confirmations->store(0);
+	blockChain->setBlockAccepted(false);
+	blockChain->proposeBlock(nullptr);
+	delete block;
+	block = nullptr;
 	//mine until no more transactions in pool
 	mine(puzzle, transactionPool, mtx, blockChain, confirmations);
 	

@@ -44,6 +44,10 @@ Transaction* Block::getProposedTransactions() {
 	return this->proposedTransactions;
 }
 
+void Block::setProposedTransactions(Transaction* transactions) {
+	this->proposedTransactions = transactions;
+}
+
 void Block::setInput(string input) {
 	this->input = input;
 }

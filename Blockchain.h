@@ -16,6 +16,7 @@ public:
 	Block* getProposedBlock();
 	Blockchain();
 	bool getBlockAccepted();
+	void setBlockAccepted(bool accepted);
 
 private:
 	Block* latestProposedBlock;

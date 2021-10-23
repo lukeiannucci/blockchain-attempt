@@ -9,6 +9,9 @@ class Transaction {
 public:
 	Transaction();
 	Transaction(unsigned int from, unsigned int to, unsigned int amount, unsigned int gasFee);
+	bool operator ==(const Transaction& rhs) const;
+	bool operator != (const Transaction& rhs) const;
+	size_t operator()(const Transaction&) const;
 	//getters
 	unsigned int getTransactionHash();
 	unsigned int getFromAddress();

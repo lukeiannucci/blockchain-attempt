@@ -20,6 +20,7 @@ public:
 	void setCurrentHash(string currentHash);
 	void setPreviousHash(string previousHash);
 	void setInput(string input);
+	void setProposedTransactions(Transaction* transactions);
 	void addTransactionsToBlock(Transaction* transactions);
 	
 

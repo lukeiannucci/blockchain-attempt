@@ -13,13 +13,17 @@ void Blockchain::addBlock() {
 	
 	this->blockchain.push_back(*this->latestProposedBlock);
 	
-	delete latestProposedBlock;
-	latestProposedBlock = nullptr;
+	//delete latestProposedBlock;
+	//latestProposedBlock = nullptr;
 	this->blockAccepted = true;
 }
 
 bool Blockchain::getBlockAccepted() {
 	return this->blockAccepted;
+}
+
+void Blockchain::setBlockAccepted(bool blockAccepted) {
+	this->blockAccepted = false;
 }
 
 void Blockchain::displayBlockchain() {
