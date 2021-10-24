@@ -10,11 +10,10 @@ void Blockchain::addBlock() {
 		auto lastBlock = this->blockchain.back();
 		this->latestProposedBlock->setPreviousHash(lastBlock.getCurrentHash());
 	}
+
+	this->latestProposedBlock->addTransactionsToBlock();
 	
 	this->blockchain.push_back(*this->latestProposedBlock);
-	
-	//delete latestProposedBlock;
-	//latestProposedBlock = nullptr;
 	this->blockAccepted = true;
 }
 
@@ -27,7 +26,7 @@ void Blockchain::setBlockAccepted(bool blockAccepted) {
 }
 
 void Blockchain::displayBlockchain() {
-	//todo
+	cout << "Successfully mined block with hash: " + (this->blockchain.end()-1)->getCurrentHash() << endl;
 }
 
 void Blockchain::proposeBlock(Block* block) {

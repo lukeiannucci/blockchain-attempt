@@ -5,14 +5,13 @@
 #include "Blockchain.h"
 #include "Puzzle.h"
 #include "Block.h"
-#include "Sha256.h"
 #include <algorithm>
 #include <mutex>
 #include <atomic>
 #include <chrono>
 #include <thread>
 
-const unsigned int MINERS_TO_SPAWN = 5;
+const unsigned int MINERS_TO_SPAWN = 10;
 using namespace std::this_thread;
 using namespace std::chrono;
 

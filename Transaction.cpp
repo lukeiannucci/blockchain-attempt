@@ -1,7 +1,7 @@
 #include "Transaction.h"
 
 Transaction::Transaction() {
-	this->transactionHash = 0;
+	this->transactionHash = "";
 	this->fromAddress = 0;
 	this->toAddress = 0;
 	this->amount = 0;
@@ -9,7 +9,7 @@ Transaction::Transaction() {
 }
 
 Transaction::Transaction(unsigned int from, unsigned int to, unsigned int amount, unsigned int gasFee) {
-	this->transactionHash = 0x0;
+	this->transactionHash = "";
 	this->fromAddress = from;
 	this->toAddress = to;
 	this->amount = amount;
@@ -33,7 +33,7 @@ size_t Transaction::operator()(const Transaction& rhs) const {
 }
 
 #pragma region GETTERS
-unsigned int Transaction::getTransactionHash() {
+string Transaction::getTransactionHash() {
 	return this->transactionHash;
 }
 
@@ -55,7 +55,7 @@ unsigned int Transaction::getGasFee() {
 #pragma endregion
 
 #pragma region SETTERS
-void Transaction::setTransactionHash(unsigned int transactionHash) {
+void Transaction::setTransactionHash(string transactionHash) {
 	this->transactionHash = transactionHash;
 }
 

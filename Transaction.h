@@ -13,21 +13,21 @@ public:
 	bool operator != (const Transaction& rhs) const;
 	size_t operator()(const Transaction&) const;
 	//getters
-	unsigned int getTransactionHash();
+	string getTransactionHash();
 	unsigned int getFromAddress();
 	unsigned int getToAddress();
 	unsigned int getAmount();
 	unsigned int getGasFee();
 
 	//setter
-	void setTransactionHash(unsigned int transactionHash);
+	void setTransactionHash(string transactionHash);
 	void setFromAddress(unsigned int fromAddress);
 	void setToAddress(unsigned int toAddress);
 	void setAmount(unsigned int amount);
 	void setGasFee(unsigned int gasFee);
 	string toString();
 private:
-	unsigned int transactionHash;
+	string transactionHash;
 	unsigned int fromAddress;
 	unsigned int toAddress;
 	unsigned int amount;

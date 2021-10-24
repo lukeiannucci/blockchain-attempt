@@ -9,6 +9,8 @@ Miner::Miner() {
 //trying to make bread $$$$$ find highest txn fees
 bool Miner::setHighestTransactionsFees(TransactionPool* transactionPool) {
 	if (transactionPool->getTransactionsPending().size() == 0) {
+		delete[] this->highestTransactionFees;
+		this->highestTransactionFees = nullptr;
 		return true;
 	}
 	unsigned int maxFeeOne = 0;
@@ -55,9 +57,10 @@ void Miner::mine(Puzzle* puzzle, TransactionPool* transactionPool, mutex * mtx, 
 			blockChain->proposeBlock(block);
 			++(*confirmations);
 		} else if (confirmations->load() > (MINERS_TO_SPAWN / 2) && !blockChain->getBlockAccepted()) {
-			blockChain->addBlock();
 			transactionPool->remove(this->highestTransactionFees[0]);
 			transactionPool->remove(this->highestTransactionFees[1]);
+			blockChain->addBlock();
+			blockChain->displayBlockchain();
 		}
 		(*mtx).unlock();
 		if (blockChain->getProposedBlock() != nullptr && !this->verified) {
@@ -75,9 +78,8 @@ void Miner::mine(Puzzle* puzzle, TransactionPool* transactionPool, mutex * mtx, 
 		}
 	} while (true);
 
-	
-	//delete[] this->highestTransactionFees;
-	//this->highestTransactionFees = new Transaction[MAX_TRANSACTIONS_PER_BLOCK];
+	delete[] this->highestTransactionFees;
+	this->highestTransactionFees = new Transaction[MAX_TRANSACTIONS_PER_BLOCK];
 	this->verified = false;
 	//wait for other miners
 	std::this_thread::sleep_for(milliseconds(1000));

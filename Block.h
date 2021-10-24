@@ -4,6 +4,7 @@
 #include <iostream>
 #include <map>
 #include "Transaction.h"
+#include "Sha256.h"
 
 using namespace std;
 
@@ -21,7 +22,7 @@ public:
 	void setPreviousHash(string previousHash);
 	void setInput(string input);
 	void setProposedTransactions(Transaction* transactions);
-	void addTransactionsToBlock(Transaction* transactions);
+	void addTransactionsToBlock();
 	
 
 private:
@@ -29,6 +30,6 @@ private:
 	string previousHash;
 	string currentHash;
 	string input;
-	map<unsigned int, Transaction> transactions;
+	map<string, Transaction> transactions;
 };
 #endif

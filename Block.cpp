@@ -29,10 +29,12 @@ void Block::setPreviousHash(string previousHash) {
 	this->previousHash = previousHash;
 }
 
-void Block::addTransactionsToBlock(Transaction* transactions) {
+void Block::addTransactionsToBlock() {
 	for (int i = 0; i < MAX_TRANSACTIONS_PER_BLOCK; i++) {
-		auto transaction = transactions[i];
-		this->transactions.insert(pair<unsigned int, Transaction>(transaction.getTransactionHash(), transaction));
+		auto transaction = this->proposedTransactions[i];
+		string hash = sha256(transaction.toString());
+		transaction.setTransactionHash(hash);
+		this->transactions.insert(pair<string, Transaction>(hash, transaction));
 	}
 }
 
